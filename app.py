@@ -60,8 +60,8 @@ with st.sidebar:
     # Botón para navegar a la landing page
     st.markdown("---")
     st.markdown("### Navegación")
-    st.link_button("Ver perfiles de clientes", url="#url_de_la_web")
-    st.info("Reemplaza '#url_de_la_web' con la URL real de tu landing page.")
+    st.link_button("Ver perfiles de clientes", url="https://31victor45.github.io/Customer_segmentation_K-means/")
+    #st.info("Reemplaza '#url_de_la_web' con la URL real de tu landing page.")
     
 # --- INTERFAZ DE USUARIO PRINCIPAL ---
 st.title("Aplicación de Segmentación de Clientes")
