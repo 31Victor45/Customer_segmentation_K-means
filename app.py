@@ -3,22 +3,28 @@
 import streamlit as st
 import pandas as pd
 from joblib import load
+import os
+
+# Obtener la ruta del directorio actual
+current_dir = os.path.dirname(__file__)
+
+# Construir las rutas completas a los archivos
+model_path = os.path.join(current_dir, 'p_items', 'customer_cluster_model.joblib')
+data_path = os.path.join(current_dir, 'p_items', 'segmented_customers.csv')
+image_path = os.path.join(current_dir, 'p_items', 'img', 'info.png')
 
 # Cargar el modelo pre-entrenado
-# Asegúrate de que el archivo 'customer_cluster_model.joblib' esté en el mismo directorio
 try:
-    model_pipeline = load('p_items/customer_cluster_model.joblib')
-    # st.success("¡Modelo cargado exitosamente!")
+    model_pipeline = load(model_path)
 except FileNotFoundError:
-    st.error("Error: No se encontró el archivo 'customer_cluster_model.joblib'. Por favor, ejecuta el script de entrenamiento primero.")
-    st.stop() # Detiene la aplicación si el archivo del modelo no se encuentra
+    st.error(f"Error: No se encontró el archivo del modelo en la ruta esperada: {model_path}")
+    st.stop()
 
 # Obtener una lista de todos los valores posibles para las características categóricas
-# Esta es una buena práctica para asegurar que la app use entradas válidas
 try:
-    df = pd.read_csv("p_items/segmented_customers.csv")
+    df = pd.read_csv(data_path)
 except FileNotFoundError:
-    st.error("Error: No se encontró el archivo 'segmented_customers.csv'. Asegúrate de que esté en el mismo directorio.")
+    st.error(f"Error: No se encontró el archivo de datos en la ruta esperada: {data_path}")
     st.stop()
 
 # Obtener una lista de todos los valores únicos de cada columna categórica
@@ -26,8 +32,11 @@ unique_values = {col: df[col].unique().tolist() for col in df.select_dtypes(incl
 
 # --- BARRA LATERAL (SIDEBAR) FIJA ---
 with st.sidebar:
-    # Se ha reemplazado use_column_width por use_container_width para evitar el aviso
-    st.image("p_items/img/info.png", use_container_width=True)
+    # Asegurarse de que la imagen se cargue correctamente
+    try:
+        st.image(image_path, use_container_width=True)
+    except FileNotFoundError:
+        st.warning("Advertencia: No se encontró la imagen 'info.png'.")
     st.title("Acerca de esta aplicación")
     st.markdown(
         """
@@ -43,12 +52,7 @@ with st.sidebar:
     # Botón para navegar a la landing page
     st.markdown("---")
     st.markdown("### Navegación")
-    
-    # Se ha reemplazado el st.markdown con un botón de enlace nativo
-    # El usuario debe reemplazar #url_de_la_web con la URL real de su landing page
     st.link_button("Ver perfiles de clientes", url="#url_de_la_web")
-    
-    # Aclaración para el usuario sobre el enlace
     st.info("Reemplaza '#url_de_la_web' con la URL real de tu landing page.")
     
 # --- INTERFAZ DE USUARIO PRINCIPAL ---
