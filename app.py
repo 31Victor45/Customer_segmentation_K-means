@@ -11,19 +11,29 @@ model_path = os.path.join(current_dir, 'p_items', 'customer_cluster_model.joblib
 data_path = os.path.join(current_dir, 'p_items', 'segmented_customers.csv')
 image_path = os.path.join(current_dir, 'p_items', 'img', 'info.png')
 
-# Cargar el modelo pre-entrenado
-try:
-    model_pipeline = load(model_path)
-except FileNotFoundError:
-    st.error(f"Error: No se encontró el archivo del modelo en la ruta esperada: {model_path}")
-    st.stop()
+# --- FUNCIONES OPTIMIZADAS CON CACHÉ ---
 
-# Obtener una lista de todos los valores posibles para las características categóricas
-try:
-    df = pd.read_csv(data_path)
-except FileNotFoundError:
-    st.error(f"Error: No se encontró el archivo de datos en la ruta esperada: {data_path}")
-    st.stop()
+@st.cache_resource
+def load_model():
+    """Carga el modelo y lo almacena en caché para evitar recargas."""
+    try:
+        return load(model_path)
+    except FileNotFoundError:
+        st.error(f"Error: No se encontró el archivo del modelo en la ruta esperada: {model_path}")
+        st.stop()
+
+@st.cache_data
+def load_data():
+    """Carga los datos y los almacena en caché para evitar recargas."""
+    try:
+        return pd.read_csv(data_path)
+    except FileNotFoundError:
+        st.error(f"Error: No se encontró el archivo de datos en la ruta esperada: {data_path}")
+        st.stop()
+
+# Cargar el modelo y los datos usando las funciones con caché
+model_pipeline = load_model()
+df = load_data()
 
 # Obtener una lista de todos los valores únicos de cada columna categórica
 unique_values = {col: df[col].unique().tolist() for col in df.select_dtypes(include='object').columns}
