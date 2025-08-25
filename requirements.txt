@@ -13,3 +13,4 @@ seaborn==0.13.2
 
 # Librería para modelos de machine learning
 scikit-learn==1.7.0
+joilib == 4.1
