@@ -1,16 +1,17 @@
-# requirements.txt para la aplicación Streamlit 
+# Interfaz de usuario de la aplicación
 streamlit==1.45.1
 
+# Manipulación y análisis de datos
 pandas==2.3.0
 numpy==2.3.0
 
 # Funciones estadísticas, incluyendo Box-Cox y su inversa
 scipy==1.15.3
 
-# Visualización de datos
+# Visualización de datos (si son necesarias para gráficos estáticos)
 matplotlib==3.10.3
 seaborn==0.13.2
 
-# Librería para modelos de machine learning
+# Librería para modelos de machine learning y su persistencia
 scikit-learn==1.7.0
-joilib == 4.1
+joblib==1.4.2
